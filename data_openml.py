@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 from torch.utils.data import Dataset
+import customization
 
 
 def simple_lapsed_time(text, lapsed):
@@ -13,7 +14,7 @@ def simple_lapsed_time(text, lapsed):
 
 def task_dset_ids(task):
     dataset_ids = {
-        'binary': [1487,44,1590,42178,1111,31,42733,1494,1017,4134],
+        'binary': [-1, 1487,44,1590,42178,1111,31,42733,1494,1017,4134],
         'multiclass': [188, 1596, 4541, 40664, 40685, 40687, 40975, 41166, 41169, 42734],
         'regression':[541, 42726, 42727, 422, 42571, 42705, 42728, 42563, 42724, 42729]
     }
@@ -42,10 +43,14 @@ def data_split(X,y,nan_mask,indices):
 
 def data_prep_openml(ds_id, seed, task, datasplit=[.65, .15, .2]):
     
-    np.random.seed(seed) 
-    dataset = openml.datasets.get_dataset(ds_id)
+    np.random.seed(seed)
     
-    X, y, categorical_indicator, attribute_names = dataset.get_data(dataset_format="dataframe", target=dataset.default_target_attribute)
+    if ds_id < 0:
+        X, y, categorical_indicator, attribute_names = customization.get_data()
+    else:
+        dataset = openml.datasets.get_dataset(ds_id)
+        X, y, categorical_indicator, attribute_names = dataset.get_data(dataset_format="dataframe", target=dataset.default_target_attribute)
+        
     if ds_id == 42178:
         categorical_indicator = [True, False, True,True,False,True,True,True,True,True,True,True,True,True,True,True,True,False, False]
         tmp = [x if (x != ' ') else '0' for x in X['TotalCharges'].tolist()]
