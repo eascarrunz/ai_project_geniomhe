@@ -222,7 +222,7 @@ for epoch in range(opt.epochs):
                             best_valid_accuracy = accuracy
                             best_test_auroc = test_auroc
                             best_test_accuracy = test_accuracy
-                            torch.save(model.state_dict(),'%s/bestmodel.pth' % (modelsave_path))
+                            torch.save(model,'%s/bestmodel.pth' % (modelsave_path))
                     else:
                         if accuracy > best_valid_accuracy:
                             best_valid_accuracy = accuracy
@@ -230,7 +230,7 @@ for epoch in range(opt.epochs):
                         #     best_valid_auroc = auroc
                             best_test_auroc = test_auroc
                             best_test_accuracy = test_accuracy               
-                            torch.save(model.state_dict(),'%s/bestmodel.pth' % (modelsave_path))
+                            torch.save(model,'%s/bestmodel.pth' % (modelsave_path))
 
                 else:
                     valid_rmse = mean_sq_error(model, validloader, device,vision_dset)    
@@ -244,7 +244,7 @@ for epoch in range(opt.epochs):
                     if valid_rmse < best_valid_rmse:
                         best_valid_rmse = valid_rmse
                         best_test_rmse = test_rmse
-                        torch.save(model.state_dict(),'%s/bestmodel.pth' % (modelsave_path))
+                        torch.save(model,'%s/bestmodel.pth' % (modelsave_path))
             model.train()
                 
 
